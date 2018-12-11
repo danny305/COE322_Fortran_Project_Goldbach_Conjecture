@@ -44,24 +44,11 @@
                 end do
         end function
         
-        subroutine successive_prime_nums_array()
+        subroutine prime_nums_array(n,prime_array)
                 integer :: n, ierror
                 integer ::  counter = 1, pot_prim_num = 3
-                !integer, dimension(:), allocatable :: array 
+                integer, dimension(n) :: prime_array 
                 logical :: is_prime 
-                integer, dimension(:), allocatable :: prime_array
-
-                
-                integer :: r,p,q, j,k, dist1, dist2, size_array
-                integer :: loop_counter = 1
-                logical :: r_prime
-                
-                print *, "How many successive prime numbers?"
-                read *, n
-               
-                allocate(prime_array(n), stat=ierror)
-                if (ierror /= 0) stop "error prime_array"
-
 
                 do while (counter <= n)
                         is_prime = prime_test_function(pot_prim_num)
@@ -78,15 +65,25 @@
                 !print *, size(prime_array) 
                 !print '(15i8,2x)',prime_array
 
+        end subroutine prime_nums_array
 
+        subroutine find_equi_dist_prime_triplets(n,prime_array,&
+                                                equi_dist_array)
+
+                integer :: n,r,p,q, j,k, dist1, dist2, size_array
+                integer :: loop_counter = 1
+                logical :: r_prime
+                integer, dimension(n) :: prime_array,equi_dist_array
+ 
                 size_array = size(prime_array)
+                print '(5a8,2x)', "count", "r","p", "q", "Dist"
                 do j=1,size_array
                         p = prime_array(j)
                         do k = j + 1,size_array
                                 q = prime_array(k)
                                 r = p -(q - p)
                                 if (r < 0) then 
-                                        print *, "R is negative"
+                !                        print *, "R is negative"
                                         exit
                                 end if
 
@@ -108,9 +105,25 @@
         program print_prime_numbers
                 use prime_numbers
                 implicit none              
+                
+                integer :: n, ierror
+                integer, dimension(:), allocatable :: &
+                        array,triplet_array
+                
+                
+                print *, "How many successive prime numbers?"
+                read *, n
 
-                call successive_prime_nums_array()
+                allocate(array(n), stat=ierror)
+                if (ierror /= 0) stop "error prime_array"
 
+                
+                allocate(triplet_array(n), stat=ierror)
+                if (ierror /= 0) stop "error triplet_array"
+
+                call prime_nums_array(n,array)
+                call find_equi_dist_prime_triplets(n, array,&
+                                                  triplet_array)
         end program
 
 
