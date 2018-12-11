@@ -1,6 +1,6 @@
          !Danny Diaz
         !dd32387
-        !12-3-18
+        !12-9-18
         !Final Project
 
 
@@ -44,7 +44,7 @@
                 end do
         end function
         
-        function successive_prime_nums_array(n)
+        integer, dimension(10000)  function successive_prime_nums_array(n)
                 integer :: n, i, ierror
                 integer ::  counter = 1, pot_prim_num = 3
                 !integer, dimension(:), allocatable :: array 
@@ -67,8 +67,9 @@
                                 pot_prim_num = pot_prim_num + 1
                                 counter = counter + 1
                         end if
-                end do 
-                print '(15i8,2x)',prime_array
+                end do
+                print *, size(prime_array) 
+        !        print '(15i8,2x)',prime_array
                 successive_prime_nums_array = prime_array
         end function 
 
@@ -84,7 +85,6 @@
                 
                 print *, "How many successive prime numbers?"
                 read *, input
-
                 
                 allocate(prime_nums_array(input), stat=inp_error)
                 if (inp_error /= 0) stop "error prime_nums_array"

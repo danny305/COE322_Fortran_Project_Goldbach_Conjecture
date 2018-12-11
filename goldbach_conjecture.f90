@@ -45,12 +45,16 @@
         end function
         
         subroutine successive_prime_nums_array()
-                integer :: n, i, ierror
+                integer :: n, ierror
                 integer ::  counter = 1, pot_prim_num = 3
                 !integer, dimension(:), allocatable :: array 
                 logical :: is_prime 
                 integer, dimension(:), allocatable :: prime_array
 
+                
+                integer :: r,p,q, j,k, dist1, dist2, size_array
+                integer :: loop_counter = 1
+                logical :: r_prime
                 
                 print *, "How many successive prime numbers?"
                 read *, n
@@ -70,8 +74,32 @@
                                 pot_prim_num = pot_prim_num + 1
                                 counter = counter + 1
                         end if
+                end do
+                !print *, size(prime_array) 
+                !print '(15i8,2x)',prime_array
+
+
+                size_array = size(prime_array)
+                do j=1,size_array
+                        p = prime_array(j)
+                        do k = j + 1,size_array
+                                q = prime_array(k)
+                                r = p -(q - p)
+                                if (r < 0) then 
+                                        print *, "R is negative"
+                                        exit
+                                end if
+
+                                r_prime = prime_test_function(r)
+                                dist1 = q - p
+                                dist2 = p - r
+                                if (r_prime .AND. dist1 == dist2) then
+                                        print '(5i8,2x)', loop_counter,r,p,q, dist1
+                                       loop_counter = loop_counter + 1
+                                        exit
+                                end if
+                        end do    
                 end do 
-                print '(15i8,2x)',prime_array
         end subroutine 
 
 
