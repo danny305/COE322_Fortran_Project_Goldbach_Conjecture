@@ -24,7 +24,7 @@
         !with p?
 
        
-        module prime_numbers
+        module Goldbach_Conjecture
 
         implicit none
        
@@ -56,7 +56,7 @@
                                 pot_prim_num = pot_prim_num + 1
 
                         else if (is_prime) then
-                                print *, pot_prim_num
+!                                print *, pot_prim_num
                                 prime_array(counter) =  pot_prim_num
                                 pot_prim_num = pot_prim_num + 1
                                 counter = counter + 1
@@ -73,13 +73,17 @@
                 integer :: n,r,p,q, j,k, dist1, dist2, size_array
                 integer :: loop_counter = 1
                 logical :: r_prime
-                integer, dimension(n) :: prime_array,equi_dist_array
- 
+                integer, dimension(n+100) :: prime_array,equi_dist_array
+                
+                call prime_nums_array(n+100, prime_array)
+
                 size_array = size(prime_array)
-                print '(5a8,2x)', "count", "r","p", "q", "Dist"
-                do j=1,size_array
+!                print *, size_array
+
+!                print '(5a8,2x)', "count", "r","p", "q", "Dist"
+                do j=1,n 
                         p = prime_array(j)
-                        do k = j + 1,size_array
+                        do k = j + 1, size(prime_array)
                                 q = prime_array(k)
                                 r = p -(q - p)
                                 if (r < 0) then 
@@ -91,19 +95,51 @@
                                 dist1 = q - p
                                 dist2 = p - r
                                 if (r_prime .AND. dist1 == dist2) then
-                                        print '(5i8,2x)', loop_counter,r,p,q, dist1
-                                       loop_counter = loop_counter + 1
+                                        equi_dist_array(loop_counter)= &
+                                                                   dist1
+!                                        print '(5i8,2x)', loop_counter,r,p,q, dist1
+                                        loop_counter = loop_counter + 1
                                         exit
                                 end if
                         end do    
                 end do 
         end subroutine 
 
+        subroutine statistical_analysis(n,equi_dist_array)
+                integer :: i,n
+                real :: MEAN, MEAN_1, VARIANCE, STD_DEV, n_float
+                integer, dimension(n) :: equi_dist_array
+                !print *, equi_dist_array
+                
 
-        end module prime_numbers
+                open(unit=1, file="conj_data1.txt", position='append')
 
-        program print_prime_numbers
-                use prime_numbers
+                !write (1,'(4a10,2x)') "N","Mean", "Variance","Std_Dev"
+
+                n_float = n
+
+                MEAN = 0.0
+                do i = 1, n
+                        MEAN = MEAN + equi_dist_array(i) 
+                end do
+                MEAN = MEAN / n
+                
+                VARIANCE = 0.0 
+                do i = 1,n
+                        VARIANCE = VARIANCE + (equi_dist_array(i) - &
+                        MEAN)**2
+                end do
+                VARIANCE = VARIANCE/(n - 1)
+                STD_DEV = SQRT(VARIANCE)
+ 
+                write (1, '(4f10.2,x)') n_float, MEAN, VARIANCE, STD_DEV
+
+                close(1)
+        end subroutine statistical_analysis
+        end module Goldbach_Conjecture
+
+        program main
+                use Goldbach_Conjecture
                 implicit none              
                 
                 integer :: n, ierror
@@ -121,9 +157,11 @@
                 allocate(triplet_array(n), stat=ierror)
                 if (ierror /= 0) stop "error triplet_array"
 
-                call prime_nums_array(n,array)
+!                call prime_nums_array(n,array)
                 call find_equi_dist_prime_triplets(n, array,&
                                                   triplet_array)
+                call statistical_analysis(n, triplet_array)
+
         end program
 
 
