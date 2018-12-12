@@ -80,7 +80,7 @@
                 size_array = size(prime_array)
 !                print *, size_array
 
-!                print '(5a8,2x)', "count", "r","p", "q", "Dist"
+                print '(5a8,2x)', "count", "r","p", "q", "Dist"
                 do j=1,n 
                         p = prime_array(j)
                         do k = j + 1, size(prime_array)
@@ -97,7 +97,7 @@
                                 if (r_prime .AND. dist1 == dist2) then
                                         equi_dist_array(loop_counter)= &
                                                                    dist1
-!                                        print '(5i8,2x)', loop_counter,r,p,q, dist1
+                                        print '(5i8,2x)', loop_counter,r,p,q, dist1
                                         loop_counter = loop_counter + 1
                                         exit
                                 end if
@@ -112,10 +112,10 @@
                 !print *, equi_dist_array
                 
 
-                open(unit=1, file="conj_data1.txt", position='append')
+                !open(unit=1, file="conj_data1.txt", position='append')
 
                 !write (1,'(4a10,2x)') "N","Mean", "Variance","Std_Dev"
-
+                print "(4a10,2x)", "N", "MEAN", "VARIANCE", "STD_DEV"
                 n_float = n
 
                 MEAN = 0.0
@@ -132,9 +132,9 @@
                 VARIANCE = VARIANCE/(n - 1)
                 STD_DEV = SQRT(VARIANCE)
  
-                write (1, '(4f10.2,x)') n_float, MEAN, VARIANCE, STD_DEV
-
-                close(1)
+                !write (1, '(4f10.2,x)') n_float, MEAN, VARIANCE, STD_DEV
+                print '(4f10.2,x)', n_float, MEAN, VARIANCE, STD_DEV
+                !close(1)
         end subroutine statistical_analysis
         end module Goldbach_Conjecture
 
