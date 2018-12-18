@@ -1,0 +1,6 @@
+The source file is goldbach_conjecture.f90. The binary that created the statistical analysis was was gbc5.bin. 
+Both of th conj_data text files pretty much have the same data but have a different step size. 
+
+However, both data files show how the mean and the variance (std dev) increase as the prime numbers increase. 
+
+
